@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const productsController= require('../controllers/productsController');
 const { upload } = require('../middlewares/upload');
+const addProductValidator = require('../validation/addProductValidator');
 
 router
 
@@ -14,7 +15,7 @@ router
         {
             name: "images"
         }
-    ]), productsController.addProduct.post)
+    ]),addProductValidator, productsController.addProduct.post)
 
 
 
