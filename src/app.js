@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const productsRouter = require('./routes/products');
 const methodOverride = require('method-override');
 require("./database/models/index")
 var app = express();
@@ -31,6 +32,7 @@ app.use(session({
 
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
+app.use('/products', productsRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

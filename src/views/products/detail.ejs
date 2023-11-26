@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<%- include('../partials/head',{ title : 'DETALLE DE PRODUCTO' }) %>
+
+    <body>
+        <%- include('../partials/header') %>
+
+
+            <main class="producto">
+                <section class="producto__section--productos">
+                    <h3>
+                        <%= title %>
+                    </h3>
+
+                    <div class="contenedor-producto-detail">
+                        <div class="producto__imagenes">
+
+                            <div class="producto__imagenes--secundarias">
+                                <div class="column">
+                                    <img src="/images/<%= mainImage %>" alt="" onclick="myFunction(this);">
+                                </div>
+                                <% images.forEach(image=> { %>
+                                    <div class="column">
+                                        <img src="/images/<%= image %>" alt="" onclick="myFunction(this);">
+                                    </div>
+                                    <% }); %>
+                            </div>
+
+                            <div class="producto__imagenes--principal">
+                                <img id="expandedImg" style="width:100%" src="/images/<%= mainImage %>"
+                                    alt="<%= title %>">
+                                <div id="imgtext"></div>
+                            </div>
+                        </div>
+
+                        <div class="contenedor-producto-article-detail">
+
+                            <div class="producto__section__article--descripcion">
+                                <p>$<%= price %>
+                                </p>
+                                <button>Agregar al carrito</button>
+                                <i class="fa-solid fa-star" style="color: #837f01;"></i>
+                            </div>
+
+                            <div class="producto__section__article--enlaces">
+                                <ul>
+                                    <li><a href="#general">General</a></li>
+                                    <li><a href="#ficha">Ficha técnica</a></li>
+                                    <li><a href="#reseña">Reseñas</a></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </section>
+
+
+
+                <div class="producto__section--detalles">
+                    <section class="producto__section--general">
+                        <h3 id="general">General</h3>
+                        <article>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum voluptatem recusandae
+                                vero repellat? Minus, voluptatem voluptates voluptas reiciendis enim excepturi rem
+                                deleniti alias eum expedita, voluptate laborum dolores dignissimos pariatur.</p>
+                        </article>
+                    </section>
+
+                    <section class="producto__section--general">
+                        <h3 id="ficha">Ficha Tecnica</h3>
+                        <article>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum vel eum a tempora sit in
+                                saepe quidem soluta ipsa architecto maxime, minus dolorum! Quas aperiam quo distinctio
+                                porro ipsa architecto!</p>
+                        </article>
+                    </section>
+
+                    <section class="producto__section--general">
+                        <h3 id="reseña">Reseñas</h3>
+                        <article>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum vel eum a tempora sit in
+                                saepe quidem soluta ipsa architecto maxime, minus dolorum! Quas aperiam quo distinctio
+                                porro ipsa architecto!</p>
+                        </article>
+                    </section>
+                </div>
+
+                <section class="producto__section--form">
+                    <i class="fa-solid fa-calculator fa-2xl" style="color: #003694;"></i>
+                    <form class="producto__section--form-tarjetas">
+                        <label for="tarjeta">Tipo de Tarjeta:</label>
+                        <select id="tarjeta" name="tarjeta">
+                            <option value="visa">Visa</option>
+                            <option value="mastercard">Mastercard</option>
+                            <option value="amex">American Express</option>
+                        </select>
+
+                        <label for="cuotas">Cantidad de Cuotas:</label>
+                        <select id="cuotas" name="cuotas">
+                            <option value="1">1 cuota</option>
+                            <option value="3">3 cuotas</option>
+                            <option value="6">6 cuotas</option>
+                            <option value="12">12 cuotas</option>
+                        </select>
+                </section>
+
+                <div class="producto__title">
+                    <h3>MAS MUSICA</h3>
+                </div>
+                <div id="conteItemsCarrusel">
+
+                    <div class="itemCarrusel" id="itemCarrusel1">
+                        <div class="tarjetaCarrusel" id="tarjetaCarrusel1">
+                            <img src="/images/product01.jpg" alt="">
+                        </div>
+                        <div class="flechasCarrusel">
+                            <a href="#itemCarrusel3">
+                                <i class="fa-solid fa-guitar fa-rotate-270"></i>
+                            </a>
+                            <a href="#itemCarrusel2">
+                                <i class="fa-solid fa-guitar"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="itemCarrusel" id="itemCarrusel2">
+                        <div class="tarjetaCarrusel" id="tarjetaCarrusel2">
+                            <img src="/images/product04.png" alt="">
+                        </div>
+                        <div class="flechasCarrusel">
+                            <a href="#itemCarrusel1">
+                                <i class="fa-solid fa-guitar fa-rotate-270"></i>
+                            </a>
+                            <a href="#itemCarrusel3">
+                                <i class="fa-solid fa-guitar"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="itemCarrusel" id="itemCarrusel3">
+                        <div class="tarjetaCarrusel" id="tarjetaCarrusel3">
+                            <img src="/images/product03.png" alt="">
+                        </div>
+                        <div class="flechasCarrusel">
+                            <a href="#itemCarrusel2">
+                                <i class="fa-solid fa-guitar fa-rotate-270"></i>
+                            </a>
+                            <a href="#itemCarrusel1">
+                                <i class="fa-solid fa-guitar"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="puntos">
+                    <a href="#itemCarrusel1"><i class="fa-solid fa-music" style="color: #ffffff;"></i></a>
+                    <a href="#itemCarrusel2"><i class="fa-solid fa-music" style="color: #ffffff;"></i></a>
+                    <a href="#itemCarrusel3"><i class="fa-solid fa-music" style="color: #ffffff;"></i></a>
+
+
+
+                </div>
+
+
+            </main>
+
+            <%- include('../partials/footer') %>
+
+
+
+                <script src='/javascripts/producto.js'></script>
+    </body>
+
+</html>
