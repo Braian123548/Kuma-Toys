@@ -25,6 +25,15 @@ module.exports = {
           key: 'id'
         }
       },
+      cantidad: {
+        type: Sequelize.INTEGER
+      },
+      imagen: {
+        type: Sequelize.STRING
+      },
+      descuento: {
+        type: Sequelize.FLOAT
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

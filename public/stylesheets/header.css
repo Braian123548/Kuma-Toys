@@ -1,0 +1,25 @@
+.navegacion-header{
+    display: flex;
+    flex-direction: column;
+}
+
+.navegacion-header-search-contenedor{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.navegacion-header-search{
+    display: flex;
+    gap: 1rem;
+}
+
+.a-navegacion{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 5rem;
+}
+
+.navegacion-header-callus{display: flex;gap: 1rem;align-items: baseline;}

@@ -6,14 +6,20 @@ module.exports = {
       name: 'Product 1',
       description: 'This is product 1',
       price: 9.99,
-      categoryId: 1, 
+      categoryId: 1,
+      cantidad: 10, 
+      imagen: 'url-de-tu-imagen', 
+      descuento: 0.1, 
       createdAt: new Date(),
       updatedAt: new Date()
     }, {
       name: 'Product 2',
       description: 'This is product 2',
       price: 19.99,
-      categoryId: 1, 
+      categoryId: 1,  
+     cantidad: 10, 
+      imagen: 'url-de-tu-imagen', 
+      descuento: 0.1, 
       createdAt: new Date(),
       updatedAt: new Date()
     }], {});

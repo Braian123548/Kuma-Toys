@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/head') %>
+
+    <body>
+        <%- include('partials/header') %>
+            <div class="container">
+                <!-- BOTON PARA AÑADIR PRODUCTOS -->
+                <button type="button" rel="tooltip" class="btn btn-info btn-just-icon btn-sm" data-toggle="modal"
+                    data-target="#addModal">
+                    <i class="material-icons">Añadir productos
+                    </i>
+                </button>
+
+                <!-- TABLA DE PRODUCTOS -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th>Nombre</th>
+                            <th>Description</th>
+                            <th>Precio</th>
+                            <th>Categroria</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% product.forEach(product=> {%>
+                            <tr>
+                                <td class="text-center">
+                                    <%= product.id %>
+                                </td>
+                                <td>
+                                    <%= product.name %>
+                                </td>
+                                <td>
+                                    <%= product.description%>
+                                </td>
+                                <td>
+                                    <%= product.price%>
+                                </td>
+                                <td>
+                                    <%= product.category.name%>
+                                </td>
+                                <td class="td-actions text-right">
+                                    <button type="button" rel="tooltip" class="btn btn-success btn-just-icon btn-sm"
+                                        data-toggle="modal" data-target="#editModal<%= product.id %>">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+
+                                    <a href="/admin/delete/<%= product.id %>" rel="tooltip"
+                                        class="btn btn-danger btn-just-icon btn-sm" data-original-title="" title="">
+                                        <i class="material-icons">delete</i>
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <!-- ModalEdit-->
+                            <div class="modal fade" id="editModal<%= product.id %>" tabindex="-1" role="dialog"
+                                aria-labelledby="editModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editModalLabel">Editar producto</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/edit/<%= product.id %>" method="get">
+                                                <label for="">Nombre
+                                                    <input type="text" value="<%= product.name %>">
+                                                </label>
+
+                                                <label for="">Descripcion
+                                                    <input type="text" value="<%= product.description %>">
+                                                </label>
+
+                                                <label for="">Precio
+                                                    <input type="text" value="<%= product.price %>">
+                                                </label>
+
+                                                <label for="">Cantidad
+                                                    <input type="text" value="<%= product.cantidad%>">
+                                                </label>
+
+                                                <img src="" alt="">
+
+                                                <label for="">Imagen
+                                                    <input type="file" value="<%= product.cantidad%>">
+                                                </label>
+
+                                                <label for="">Categoria
+                                                    <select>
+                                                        <option value="categoria">
+                                                            <%= product.category.name%>
+                                                        </option>
+
+                                                        <% categorias.forEach(categoria=> {%>
+                                                            <option value="categoria">
+                                                                <%= categoria.name%>
+                                                            </option>
+                                                            <% }); %>
+                                                    </select>
+                                                </label>
+                                                <br>
+
+                                                <label for="">Descuento
+                                                    <input type="text" value="<%= product.descuento%>">
+                                                </label>
+                                                <button type="submit" class="btn btn-primary">Enviar </button>
+                                            </form>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Cerrar</button>
+                                            <button type="button" class="btn btn-primary">Guardar cambios</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }); %>
+                    </tbody>
+                </table>
+
+
+
+
+                <!-- MODAL AGREGAR -->
+                <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addModalLabel">Agregar producto</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="">
+                                    <label for="">Nombre
+                                        <input type="text" value="<%= product.name %>">
+                                    </label>
+
+                                    <label for="">Descripcion
+                                        <input type="text" value="<%= product.description %>">
+                                    </label>
+
+                                    <label for="">Precio
+                                        <input type="text" value="<%= product.price %>">
+                                    </label>
+
+                                    <label for="">Cantidad
+                                        <input type="text" value="<%= product.cantidad%>">
+                                    </label>
+
+                                    <img src="" alt="">
+
+                                    <label for="">Imagen
+                                        <input type="file" value="<%= product.cantidad%>">
+                                    </label>
+
+                                    <label for="">Categoria
+                                        <select>
+                                            <% categorias.forEach(categoria=> {%>
+                                                <option value="categoria">
+                                                    <%= categoria.name%>
+                                                </option>
+                                                <% }); %>
+                                        </select>
+                                    </label>
+                                    <br>
+                                    <label for="">Descuento
+                                        <input type="text" value="<%= product.descuento%>">
+                                    </label>
+                                    <button type="submit" class="btn btn-primary">Enviar </button>
+                                    <button type="submit" class="btn btn-primary">Enviar </button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    </body>
+
+</html>

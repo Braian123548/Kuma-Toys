@@ -25,7 +25,7 @@ const register = {
                 password: hashedPassword
             });
 
-            return res.redirect('/login');
+            return res.redirect('/user/login');
         } catch (error) {
             console.error(error);
             return res.status(500).render('error', { error: 'Internal Server Error' });
@@ -48,19 +48,33 @@ const register = {
                 email: req.body.email
             }
         })
-             .then(user=> {
-                 req.session.userLogin = {
-                     id: user.id,
-                     firtsName: user.firtsName,
-                     lastName: user.lastName, 
-                 }
+        .then(user=> {
+            if(user.rol === 'admin') {
+                req.session.userAdmin = {
+                    id: user.id,
+                    firtsName: user.firtsName,
+                    lastName: user.lastName, 
+                }
+            } else {
+                req.session.userLogin = {
+                    id: user.id,
+                    firtsName: user.firtsName,
+                    lastName: user.lastName, 
+                }
+            }
         
-                 if (req.body.remember) {
-                     res.cookie("creativeDiamonds", req.session.userLogin, {
-                       maxAge: 1000 * 60 * 5,
-                     });
-                   }
-
+            if (req.body.remember) {
+                if(user.rol === 'admin') {
+                    res.cookie("Kuma-Toys", req.session.userAdmin, {
+                        maxAge: 1000 * 60 * 5,
+                    });
+                } else {
+                    res.cookie("Kuma-Toys", req.session.userLogin, {
+                        maxAge: 1000 * 60 * 5,
+                    });
+                }
+            }
+            
         
             return res.redirect('/')
              })

@@ -2,17 +2,22 @@ const { validationResult } = require('express-validator');
 const db = require('../database/models');
 
 const addProduct = {
-    get: (req, res) => {
-        db.Products.findAll()
-        .then((products) => {
-            return res.render("admin", {
-                products,
+    get: async (req, res) => {
+        try {
+            const categorias = await db.Categories.findAll()
+            const product = await db.Products.findAll({
+                include: {
+                    model: db.Categories,
+                    as: 'category',
+                    attributes: ['name']
+                }
             });
-        })
-        .catch((error) => {
-            console.log(error);
-            
-        });
+
+            res.render("admin", { product: product,categorias, title: "admin" });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Server Error');
+        }
     },
     post:  (req, res) => {
         
