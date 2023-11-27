@@ -1,8 +1,8 @@
 const db = require('../database/models');
 
 const shop = {
-    get: (req, res) => {
-        db.Products.findAll()
+    get: async (req, res) => {
+        await db.Products.findAll()
         .then((products) => {
             return res.render("shop", {
                 products, title:"shop"

@@ -37,13 +37,13 @@ const register = {
      get: (req, res) => {
          res.render('login',{title:"login"});
      },
-     post: (req, res) => {
+     post: async (req, res) => {
          const errors = validationResult(req);
          if (!errors.isEmpty()) {
              return res.status(400).render('login', { errors: errors.mapped(), old: req.body, title:"login"});
          }
 
-         db.Users.findOne({
+         await db.Users.findOne({
             where : {
                 email: req.body.email
             }

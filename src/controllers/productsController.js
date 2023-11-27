@@ -2,8 +2,8 @@ const { validationResult } = require('express-validator');
 const db = require('../database/models');
 
 const addProduct = {
-    get: (req, res) => {
-        db.Products.findAll()
+    get: async (req, res) => {
+        await db.Products.findAll()
         .then((products) => {
             return res.render("admin", {
                 products,
@@ -14,14 +14,14 @@ const addProduct = {
             
         });
     },
-    post:  (req, res) => {
+    post:  async (req, res) => {
         
             const errors = validationResult(req);
 
             if (errors.isEmpty()) {
                 const { name, discount, description, price, categoryId, quantity } = req.body;
 
-                db.Products.create({
+                await db.Products.create({
                     name: name.trim(),
                     discount: discount || 0,
                     description: description.trim(),
@@ -63,9 +63,19 @@ const addProduct = {
                 
             })
         }
+    },
+
+    
+}    
+
+const detail={
+    get:(req,res)=>{
+        const id = req.params.id
+        res.render('products/detail.ejs')
     }
-}       
+}
 
 module.exports = {
-    addProduct
+    addProduct,
+    detail
 }
