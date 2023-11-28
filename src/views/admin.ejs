@@ -48,10 +48,13 @@
                                         <i class="material-icons">edit</i>
                                     </button>
 
-                                    <a href="/admin/delete/<%= product.id %>" rel="tooltip"
-                                        class="btn btn-danger btn-just-icon btn-sm" data-original-title="" title="">
-                                        <i class="material-icons">delete</i>
-                                    </a>
+                                    <form action="/products/remove/<%= product.id %>?_method=DELETE" method="POST">
+                                        <button type="submit" class="btn btn-danger btn-just-icon btn-sm"
+                                            data-original-title="" title="">
+                                            <i class="material-icons">delete</i>
+                                        </button>
+                                    </form>
+
                                 </td>
                             </tr>
 
@@ -67,46 +70,49 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form action="/edit/<%= product.id %>" method="get">
+                                            <form action="/products/update/<%= product.id %>?_method=PUT" method="post"
+                                                enctype="multipart/form-data">
                                                 <label for="">Nombre
-                                                    <input type="text" value="<%= product.name %>">
+                                                    <input type="text" value="<%= product.name %>" name="name">
                                                 </label>
 
                                                 <label for="">Descripcion
-                                                    <input type="text" value="<%= product.description %>">
+                                                    <input type="text" value="<%= product.description %>"
+                                                        name="description">
                                                 </label>
 
                                                 <label for="">Precio
-                                                    <input type="text" value="<%= product.price %>">
+                                                    <input type="number" value="<%= product.price %>" name="price">
                                                 </label>
 
                                                 <label for="">Cantidad
-                                                    <input type="text" value="<%= product.cantidad%>">
+                                                    <input type="number" value="<%= product.cantidad%>" name="cantidad">
                                                 </label>
 
                                                 <img src="" alt="">
 
                                                 <label for="">Imagen
-                                                    <input type="file" value="<%= product.cantidad%>">
+                                                    <input type="file" value="<%= product.cantidad%>" name="mainImage">
+                                                </label>
+
+                                                <label for="">Imagenes
+                                                    <input type="file" value="<%= product.cantidad%>" multiple
+                                                        name="images">
                                                 </label>
 
                                                 <label for="">Categoria
-                                                    <select>
-                                                        <option value="categoria">
-                                                            <%= product.category.name%>
-                                                        </option>
-
-                                                        <% categorias.forEach(categoria=> {%>
-                                                            <option value="categoria">
-                                                                <%= categoria.name%>
+                                                    <select name="categoria">
+                                                        <% categorias.forEach(categoria=> { %>
+                                                            <option value="<%= categoria.name %>">
+                                                                <%= categoria.name %>
                                                             </option>
                                                             <% }); %>
                                                     </select>
                                                 </label>
                                                 <br>
-
                                                 <label for="">Descuento
-                                                    <input type="text" value="<%= product.descuento%>">
+                                                    <input type="number" value="<%= product.descuento%>"
+                                                        name="descuento">
                                                 </label>
                                                 <button type="submit" class="btn btn-primary">Enviar </button>
                                             </form>
@@ -139,43 +145,46 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="">
+                                <form action="/products/addProduct" method="post" enctype="multipart/form-data">
                                     <label for="">Nombre
-                                        <input type="text" value="<%= product.name %>">
+                                        <input type="text" value="<%= product.name %>" name="name">
                                     </label>
 
                                     <label for="">Descripcion
-                                        <input type="text" value="<%= product.description %>">
+                                        <input type="text" value="<%= product.description %>" name="description">
                                     </label>
 
                                     <label for="">Precio
-                                        <input type="text" value="<%= product.price %>">
+                                        <input type="number" value="<%= product.price %>" name="price">
                                     </label>
 
                                     <label for="">Cantidad
-                                        <input type="text" value="<%= product.cantidad%>">
+                                        <input type="number" value="<%= product.cantidad%>" name="cantidad">
                                     </label>
 
                                     <img src="" alt="">
 
                                     <label for="">Imagen
-                                        <input type="file" value="<%= product.cantidad%>">
+                                        <input type="file" value="<%= product.cantidad%>" name="mainImage">
+                                    </label>
+
+                                    <label for="">Imagenes
+                                        <input type="file" value="<%= product.cantidad%>" multiple name="images">
                                     </label>
 
                                     <label for="">Categoria
-                                        <select>
-                                            <% categorias.forEach(categoria=> {%>
-                                                <option value="categoria">
-                                                    <%= categoria.name%>
+                                        <select name="categoria">
+                                            <% categorias.forEach(categoria=> { %>
+                                                <option value="<%= categoria.name %>">
+                                                    <%= categoria.name %>
                                                 </option>
                                                 <% }); %>
                                         </select>
                                     </label>
                                     <br>
                                     <label for="">Descuento
-                                        <input type="text" value="<%= product.descuento%>">
+                                        <input type="number" value="<%= product.descuento%>" name="descuento">
                                     </label>
-                                    <button type="submit" class="btn btn-primary">Enviar </button>
                                     <button type="submit" class="btn btn-primary">Enviar </button>
                                 </form>
                             </div>

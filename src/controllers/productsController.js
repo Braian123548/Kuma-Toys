@@ -4,104 +4,114 @@ const { existsSync, unlinkSync } = require('fs');
 
 
 const addProduct = {
-    get: async (req, res) => {
-        await db.Products.findAll()
-        .then((products) => {
-            return res.render("admin", {
-                products,
+    post: async (req, res) => {
+
+        const { name, description, price, cantidad, categoria, descuento } = req.body;
+        console.log(name, description, price, cantidad, categoria, descuento);
+
+        const image = req.files.mainImage ? req.files.mainImage[0].filename : null;
+        const images = req.files.images ? req.files.images.map(file => file.filename) : null;
+
+        try {
+
+            const category = await db.Categories.findOne({ where: { name: categoria } });
+
+            if (!category) {
+                return res.status(400).send('La categoría no existe');
+            }
+
+            const product = await db.Products.create({
+                name: name,
+                description: description,
+                price: price,
+                cantidad: cantidad,
+                imagen: image,
+                categoryId: category.id,
+                descuento: descuento
             });
-        })
-        .catch((error) => {
-            console.log(error);
-            
-        });
-    },
-    post:  async (req, res) => {
-        
-            const errors = validationResult(req);
 
-            if (errors.isEmpty()) {
-                const { name, discount, description, price, categoryId, quantity } = req.body;
-
-                await db.Products.create({
-                    name: name.trim(),
-                    discount: discount || 0,
-                    description: description.trim(),
-                    price,
-                    categoryId,
-                    quantity,
-                    mainImage: req.files.image ? req.files.image[0].filename : [],
-                    image: req.files.images ? req.files.images[0].filename : [],
-                })
-                .then(product => {
-                    if (req.files.images) {
-                        return res.redirect('/admin');
-                        }
-                    })
-                .catch(error => console.log(error))
-            } else {
-                if(req.files.length){
-                    req.files.forEach(file => {
-                        existsSync('./public/images/' + file.filename) && unlinkSync('./public/images/' + file.filename)
+            if (images.length > 0) {
+                for (let i = 0; i < images.length; i++) {
+                    await db.Images.create({
+                        filename: images[i],
+                        productId: product.id
                     });
                 }
-        
-            
-        
-        
-        
-            db.Categories.findAll({
-                order: ['name']
-            })
-            .then((categories) => {
-                return res.render("./admin/addBand", {
-                    categories,
-                    errors : errors.mapped(),
-                    old : req.body
-                });
-            })
-            .catch((error) => {
-                console.log(error);
-                
-            })
+            }
+
+            res.redirect('/admin')
+
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Server Error');
         }
-    },
+    }
 
-    
-}    
 
-const detail={
-    get:(req,res)=>{
+
+
+}
+
+const detail = {
+    get: (req, res) => {
         const id = req.params.id
         res.render('products/detail.ejs')
     }
 }
 
-const editProduct = {
-    get : async (req, res) => {
-
+const remove = {
+    delete: async (req, res) => {
+        const { id } = req.params;
         try {
-            const id = req.params.id;
-            const category = await db.Categories.findAll();
             const product = await db.Products.findByPk(id);
-            return res.render('./admin/editProduct', {
-                category,
-                product  
-            })
-        } catch (error) {
-            return console.log(error)
+            if (!product) {
+                return res.status(404).send('El producto no existe');
+            }
+
+           
+            await db.Images.destroy({ where: { productId: id } });
+
+            
+            await db.Products.destroy({ where: { id: id } });
+
+            res.redirect('/admin')
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Server Error');
         }
     }
 }
 
+
 const updateProduct = {
-    put : (req, res) => {
+
+    // get: async (req, res) => {
+
+    //     try {
+    //         const id = req.params.id;
+    //         const category = await db.Categories.findAll();
+    //         const product = await db.Products.findByPk(id);
+    //         return res.render('./admin/editProduct', {
+    //             category,
+    //             product
+    //         })
+    //     } catch (error) {
+    //         return console.log(error)
+    //     }
+    // },
+
+    put: (req, res) => {
 
         const errors = validationResult(req);
         const id = req.params.id;
-        const { name, discount, description, price, categoryId, quantity } = req.body;
+        const { name, description, price, cantidad, categoria, descuento } = req.body;
+        console.log(name, description, price, cantidad, categoria, descuento);
+
+        const image = req.files.mainImage ? req.files.mainImage[0].filename : null;
+        const images = req.files.images ? req.files.images.map(file => file.filename) : null;
+
         if (errors.isEmpty()) {
-    
+
             db.Products.findByPk(id)
                 .then(product => {
                     if (req.files.image && existsSync(`./public/images/${product.mainImage}`)) {
@@ -110,7 +120,7 @@ const updateProduct = {
                     if (req.files.images && existsSync(`./public/images/${product.image}`)) {
                         unlinkSync(`./public/images/${product.image}`)
                     }
-    
+
                     db.Categories.findAll()
                         .then(category => {
                             db.Products.update(
@@ -135,7 +145,7 @@ const updateProduct = {
                                     if (req.files.images && existsSync(`./public/images/${product.image}`)) {
                                         unlinkSync(`./public/images/${product.image}`)
                                     }
-    
+
                                 } else {
                                     return res.redirect('/admin');
                                 }
@@ -157,14 +167,16 @@ const updateProduct = {
                 })
                 .catch(error => console.log(error))
         }
-    
-    
+
+
     }
 }
+
+
 
 module.exports = {
     addProduct,
     detail,
-    editProduct,
-    updateProduct
+    updateProduct,
+    remove
 }
