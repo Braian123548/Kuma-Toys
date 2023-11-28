@@ -29,15 +29,15 @@ router
 
 
 /*Edit y Update Products*/
-    //.get('/edit/:id', edit)
-    /*.put('/update/:id', upload.fields([
+    .get('/edit/:id', productsController.editProduct.get)
+    .put('/update/:id', upload.fields([
         {
             name: "mainImage"
         },
         {
             name: "images"
         }
-    ]), update)
+    ]), productsController.updateProduct.put)
 
 
 
