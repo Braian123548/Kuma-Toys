@@ -75,7 +75,7 @@ const detail = {
         }
 
         const filenames = imagenes.map(image => image.dataValues.filename);
-        res.render("./products/detail", {product:product.dataValues,images:filenames})
+        res.render("./products/detail", { product: product.dataValues, images: filenames })
     }
 
 
@@ -151,76 +151,74 @@ const updateProduct = {
         const { name, description, price, cantidad, categoria, descuento } = req.body;
         console.log(name, description, price, cantidad, categoria, descuento);
 
-        const image = req.files.mainImage ? req.files.mainImage[0].filename : null;
-        const images = req.files.images ? req.files.images.map(file => file.filename) : null;
+
 
         if (errors.isEmpty()) {
 
-            db.Products.findByPk(id)
-                .then(product => {
-                    if (req.files.image && existsSync(`./public/images/${product.mainImage}`)) {
-                        unlinkSync(`./public/images/${product.mainImage}`);
-                    }
-                    if (req.files.images && existsSync(`./public/images/${product.image}`)) {
-                        unlinkSync(`./public/images/${product.image}`)
-                    }
+            db.Product.findByPk(id, {
+                include: ["images"],
+            })
+                .then((product) => {
+                    req.files.image &&
+                        existsSync(`./public/images/products/${product.image}`) &&
+                        unlinkSync(`./public/images/products${product.image}`);
 
-                    db.Categories.findAll()
-                        .then(category => {
-                            db.Products.update(
-                                {
-                                    name: name.trim(),
-                                    discount,
-                                    mainImage: req.files.image ? req.files.image[0].filename : band.image,
-                                    image: req.files.images ? req.files.images[0].filename : band.images,
-                                    price,
-                                    description,
-                                    quantity,
-                                    categoryId
-                                },
-                                {
-                                    where: {
-                                        id
-                                    }
-                                }
-                            ).then(() => {
-                                if (req.files.image && existsSync(`./public/images/${product.mainImage}`)) {
-                                    unlinkSync(`./public/images/${product.mainImage}`);
-                                    if (req.files.images && existsSync(`./public/images/${product.image}`)) {
-                                        unlinkSync(`./public/images/${product.image}`)
-                                    }
-
-                                } else {
-                                    return res.redirect('/admin');
-                                }
+                    db.Products.update(
+                        {
+                            name: name.trim(),
+                            description: description.trim(),
+                            price,
+                            cantidad,
+                            categoria,
+                            descuento,
+                            
+                            image: req.files.image ? req.files.image[0].filename : product.image,
+                        },
+                        {
+                            where: {
+                                id,
+                            },
+                        }
+                    ).then(() => {
+                        if (req.files.images) {
+                            product.images.forEach((image) => {
+                                existsSync(`./public/images/products/${image.file}`) &&
+                                    unlinkSync(`./public/images/products/${image.file}`);
                             });
-                        })
-                        .catch(error => console.log(error));
+
+                            db.Image.destroy({
+                                where: {
+                                    productId: id,
+                                },
+                            }).then(() => {
+                                const images = req.files.images.map((file) => {
+                                    return {
+                                        file: file.filename,
+                                        main: false,
+                                        productId: product.id,
+                                    };
+                                });
+                                db.Image.bulkCreate(images, {
+                                    validate: true,
+                                }).then((response) => {
+                                    return res.redirect("/admin");
+                                });
+                            });
+                        } else {
+                            return res.redirect("/admin");
+                        }
+                    });
                 })
-        } else {
-            const category = db.Categories.findAll()
-            const product = db.Products.findByPk(id)
-            Promise.all([category, product])
-                .then(([category, product]) => {
-                    return res.render('./admin/editProduct', {
-                        category,
-                        product,
-                        errors: errors.mapped(),
-                        old: req.body
-                    })
-                })
-                .catch(error => console.log(error))
+                .catch((error) => console.log(error));
         }
-
-
     }
 }
+    
 
 
-
-module.exports = {
-    addProduct,
-    detail,
-    updateProduct,
-    remove
-}
+        module.exports = {
+            addProduct,
+            detail,
+            updateProduct,
+            remove
+        }
