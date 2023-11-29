@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const db = require('../database/models');
-const { existsSync, unlinkSync } = require('fs');
+const fs = require('fs');
+const path = require('path')
 
 
 const addProduct = {
@@ -53,10 +54,32 @@ const addProduct = {
 }
 
 const detail = {
-    get: (req, res) => {
-        const id = req.params.id
-        res.render('products/detail.ejs')
+
+    get: async (req, res) => {
+        const id = req.params.id;
+        const product = await db.Products.findOne({
+            where: {
+                id: id
+            }
+        });
+
+        const imagenes = await db.Images.findAll({
+            where: {
+                productId: id
+            }
+        });
+
+        if (product === null) {
+            console.log('Producto no encontrado');
+            return;
+        }
+
+        const filenames = imagenes.map(image => image.dataValues.filename);
+        res.render("./products/detail", {product:product.dataValues,images:filenames})
     }
+
+
+
 }
 
 const remove = {
@@ -68,10 +91,31 @@ const remove = {
                 return res.status(404).send('El producto no existe');
             }
 
-           
+            const images = await db.Images.findAll({ where: { productId: id } })
+            images.forEach(image => {
+                const filePath = path.join(__dirname, "..", "..", "public", 'images', 'products', image.filename);
+                fs.unlink(filePath, err => {
+                    if (err) {
+                        console.error(`Error al eliminar el archivo ${filePath}:`, err);
+                    } else {
+                        console.log(`Archivo ${filePath} eliminado con éxito.`);
+                    }
+                });
+            });
+
+            const products = await db.Products.findOne({ where: { id: id } });
+            const filePath = path.join(__dirname, "..", "..", "public", 'images', 'products', products.imagen);
+            fs.unlink(filePath, err => {
+                if (err) {
+                    console.error(`Error al eliminar el archivo ${filePath}:`, err);
+                } else {
+                    console.log(`Archivo ${filePath} eliminado con éxito.`);
+                }
+            });
+
             await db.Images.destroy({ where: { productId: id } });
 
-            
+
             await db.Products.destroy({ where: { id: id } });
 
             res.redirect('/admin')

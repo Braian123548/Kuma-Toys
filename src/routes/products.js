@@ -4,7 +4,7 @@ const productsController= require('../controllers/productsController');
 const shopController= require('../controllers/shopController');
 const detailController= require('../controllers/productsController');
 const removeController= require('../controllers/productsController');
-const upload  = require('../middlewares/upload');
+const {upload}  = require('../middlewares/upload');
 // const addProductValidator = require('../validation/addProductValidator');
 
 router
@@ -17,7 +17,8 @@ router
              name: "mainImage"
          },
          {
-             name: "images"
+             name: "images",
+             maxCount: 4
          }
      ]), productsController.addProduct.post)
 
@@ -37,7 +38,8 @@ router
             name: "mainImage"
         },
         {
-            name: "images"
+            name: "images",
+            maxCount: 4
         }
     ]), productsController.updateProduct.put)
 
