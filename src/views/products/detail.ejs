@@ -2,7 +2,6 @@
 <html>
 <%- include('../partials/head',{ title : 'Detalle' }) %>
 
-
     <body>
         <%- include('../partials/header') %>
 
@@ -27,13 +26,13 @@
                     </div>
 
                     <div thumbsSlider="" class="swiper mySwiper">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
+                        <div class="swiper-wrapper swiper-wrappers">
+                            <div class="swiper-slide swiper-slides">
                                 <img src="../../../images/products/<%= product.imagen%>" />
                             </div>
 
                             <% images.forEach(image=> {%>
-                                <div class="swiper-slide">
+                                <div class="swiper-slide swiper-slides">
                                     <img src="../../../images/products/<%= image%>" />
                                 </div>
                                 <% }); %>
@@ -52,16 +51,21 @@
                         <%= product.description%>
                     </h3>
                     <p><%= product.descripcion%></p>
-                    <h4>
-                        <%= product.Price%>
-                    </h4>
-                    <div>
-                        <button class="heartButton">
-                            <i class="fa-regular fa-heart"></i>
-                        </button>
-                        <i class="fa-solid fa-bag-shopping"></i>
-                    </div>
 
+                    <div class="botones-detail">
+                        <div>
+                          <h4>$<%= product.price %>
+                          </h4>
+                        </div>
+                        <div>
+                          <button class="heartButton">
+                            <i class="fa-regular fa-heart"></i>
+                          </button>
+                          <i class="fa-solid fa-bag-shopping"></i>
+                        </div>
+                      </div>
+
+                      
                 </div>
 
 

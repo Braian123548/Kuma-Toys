@@ -7,7 +7,7 @@ const path = require('path')
 const addProduct = {
     post: async (req, res) => {
 
-        const { name, description,descripcion, price, cantidad, categoria, descuento } = req.body;
+        const { name, description, descripcion, price, cantidad, categoria, descuento } = req.body;
         console.log(name, description, price, cantidad, categoria, descuento);
 
         const image = req.files.mainImage ? req.files.mainImage[0].filename : null;
@@ -20,11 +20,11 @@ const addProduct = {
             if (!category) {
                 return res.status(400).send('La categoría no existe');
             }
-    
+
             const product = await db.Products.create({
                 name: name,
                 description: description,
-                descripcion:descripcion,
+                descripcion: descripcion,
                 price: price,
                 cantidad: cantidad,
                 imagen: image,
@@ -76,7 +76,7 @@ const detail = {
         }
 
         const filenames = imagenes.map(image => image.dataValues.filename);
-        res.render("./products/detail", {product:product.dataValues,images:filenames})
+        res.render("./products/detail", { product: product.dataValues, images: filenames })
     }
 
 
@@ -134,21 +134,6 @@ const remove = {
 
 const updateProduct = {
 
-    // get: async (req, res) => {
-
-    //     try {
-    //         const id = req.params.id;
-    //         const category = await db.Categories.findAll();
-    //         const product = await db.Products.findByPk(id);
-    //         return res.render('./admin/editProduct', {
-    //             category,
-    //             product
-    //         })
-    //     } catch (error) {
-    //         return console.log(error)
-    //     }
-    // },
-
     put: (req, res) => {
 
         const errors = validationResult(req);
@@ -176,7 +161,7 @@ const updateProduct = {
                             cantidad,
                             categoria,
                             descuento,
-                            
+
                             image: req.files.image ? req.files.image[0].filename : product.image,
                         },
                         {
@@ -219,11 +204,72 @@ const updateProduct = {
     }
 }
 
+const favorite = {
+    shop: async (req, res) => {
+        const idProduct = req.params.id;
+        const idUser = req.session.userLogin || req.session.userAdmin;
 
+        if (!idUser) {
+            return res.redirect("/user/login");
+        }
+
+        const id = idUser.id;
+
+        const favoriteProduct = await db.Favorites.findOne({
+            where: {
+                userId: id,
+                productId: idProduct
+            }
+        });
+
+        if (favoriteProduct) {
+            
+            await favoriteProduct.destroy();
+        } else {
+            await db.Favorites.create({
+                userId: id,
+                productId: idProduct
+            });
+        }
+
+        res.redirect("/products/shop");
+    },
+
+    detail: async (req, res) => {
+        const idProduct = req.params.id;
+        const idUser = req.session.userLogin || req.session.userAdmin;
+
+        if (!idUser) {
+            return res.redirect("/user/login");
+        }
+
+        const id = idUser.id;
+
+        const favoriteProduct = await db.Favorites.findOne({
+            where: {
+                userId: id,
+                productId: idProduct
+            }
+        });
+
+        if (favoriteProduct) {
+            
+            await favoriteProduct.destroy();
+        } else {
+            await db.Favorites.create({
+                userId: id,
+                productId: idProduct
+            });
+        }
+
+        res.redirect("/products/detail");
+    }
+}
 
 module.exports = {
     addProduct,
     detail,
     updateProduct,
-    remove
+    remove,
+    favorite
 }

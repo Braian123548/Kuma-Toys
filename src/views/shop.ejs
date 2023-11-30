@@ -3,7 +3,6 @@
 <%- include('partials/head') %>
 
   <body>
-
     <%- include('partials/header') %>
 
       <div class="contenedor-shop">
@@ -26,10 +25,17 @@
                 <h4>$<%= product.price %>
                 </h4>
               </div>
-              <div>
-                <button class="heartButton">
-                  <i class="fa-regular fa-heart"></i>
-                </button>
+              <div class="botones-shop separar">
+                <form method="POST" action="/products/favorite/<%= product.id %>" id="favoriteForm">
+                  <input type="hidden" name="id" id="productId">
+                  <button type="submit" class="heartButton">
+                    <% if (favorites.some(favorite => favorite.productId === product.id)) { %>
+                      <i class="fa-regular fa-heart" style="color: red; border-color: red;"></i>
+                    <% } else { %>
+                      <i class="fa-regular fa-heart"></i>
+                    <% } %>
+                  </button>
+                </form>
                 <i class="fa-solid fa-bag-shopping"></i>
               </div>
             </div>
@@ -38,9 +44,6 @@
           <% }); %>
       </div>
 
-
-      
-      
      
   </body>
 

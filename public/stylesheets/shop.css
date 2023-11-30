@@ -18,12 +18,12 @@
 
 .card-shop img{
     border-radius:1.5rem 1.5rem 0rem 0rem ;
+    height: 300px;
 }
 
 .card-shop{
     border-radius: 1.5rem;
 }
-
 
 .card i{
     border-radius: 2rem;
@@ -36,6 +36,7 @@
     padding: 0.5rem;
     justify-content: space-between;
     margin: 0.5rem 0rem;
+    align-items: center;
 }
 
 .heartButton {
@@ -45,4 +46,29 @@
     margin: 0;
     cursor: pointer;
   }
+
+  .separar i{
+    margin-left: 0.2rem;
+  }
+  
+  @media (width>300px) and (width<780px) {
+    .contenedor-shop{
+        margin: 5rem 0rem;
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 10px;
+        justify-items: center;
+    }
+  }
+
+  @media (width>780px) and (width<1024px) {
+    .contenedor-shop{
+        margin: 5rem 0rem;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        justify-items: center;
+    }
+  }
+
   

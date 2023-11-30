@@ -2,3 +2,11 @@
 @import url(index.css);
 @import url(shop.css);
 @import url(detail.css);
+
+body{
+    padding: 1rem;
+}
+
+i{
+    font-size: 1.5rem;
+}

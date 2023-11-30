@@ -45,5 +45,8 @@ router
 
     .delete('/remove/:id', removeController.remove.delete)
 
+    .post('/favorite/:id', removeController.favorite.shop)
+
+
     
 module.exports = router;
