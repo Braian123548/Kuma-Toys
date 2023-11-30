@@ -2,6 +2,7 @@ const { validationResult } = require('express-validator');
 const db = require('../database/models');
 const fs = require('fs');
 const path = require('path')
+const { existsSync, unlinkSync } = require("fs");
 
 
 const addProduct = {
@@ -155,13 +156,13 @@ const updateProduct = {
 
         if (errors.isEmpty()) {
 
-            db.Product.findByPk(id, {
+            db.Products.findByPk(id, {
                 include: ["images"],
             })
                 .then((product) => {
                     req.files.image &&
                         existsSync(`./public/images/products/${product.image}`) &&
-                        unlinkSync(`./public/images/products${product.image}`);
+                        unlinkSync(`./public/images/products/${product.image}`);
 
                     db.Products.update(
                         {
@@ -186,7 +187,7 @@ const updateProduct = {
                                     unlinkSync(`./public/images/products/${image.file}`);
                             });
 
-                            db.Image.destroy({
+                            db.Images.destroy({
                                 where: {
                                     productId: id,
                                 },
@@ -198,7 +199,7 @@ const updateProduct = {
                                         productId: product.id,
                                     };
                                 });
-                                db.Image.bulkCreate(images, {
+                                db.Images.bulkCreate(images, {
                                     validate: true,
                                 }).then((response) => {
                                     return res.redirect("/admin");
