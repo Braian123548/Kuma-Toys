@@ -1,7 +1,8 @@
 const { validationResult } = require('express-validator');
 const db = require('../database/models');
 const fs = require('fs');
-const path = require('path')
+const path = require('path');
+const { get } = require('http');
 
 
 const addProduct = {
@@ -205,6 +206,34 @@ const updateProduct = {
 }
 
 const favorite = {
+
+    getFavorites: async (req,res)=>{
+        const idUser = req.session.userLogin || req.session.userAdmin;
+
+
+
+        if (!idUser) {
+            return res.redirect("/user/login");
+        }
+        const id = idUser.id;
+
+        const favorites = await db.Favorites.findAll({
+            where: {
+                userId: id
+            },
+            include: [{
+                model: db.Products,
+                as: 'product'
+              }]
+        });
+
+
+        const products = favorites.map(favorite => favorite.product);
+
+        res.render('favorite', { products: products, favorites: favorites });
+    },
+
+
     shop: async (req, res) => {
         const idProduct = req.params.id;
         const idUser = req.session.userLogin || req.session.userAdmin;
@@ -266,10 +295,18 @@ const favorite = {
     }
 }
 
+
+const profile ={
+    get:(req,res)=>{
+        res.render('profile')
+    }
+}
+
 module.exports = {
     addProduct,
     detail,
     updateProduct,
     remove,
-    favorite
+    favorite,
+    profile
 }

@@ -3,6 +3,8 @@ const db = require('../database/models');
 const shop = {
     get: async (req, res) => {
         const idUser = req.session.userLogin || req.session.userAdmin;
+        const title = req.query.title;
+        console.log(title);
         let favorites = [];
         if (idUser) {
             favorites = await db.Favorites.findAll({

@@ -47,6 +47,8 @@ router
 
     .post('/favorite/:id', removeController.favorite.shop)
 
+    .get('/favorite', removeController.favorite.getFavorites)
+
 
     
 module.exports = router;
