@@ -1,24 +1,24 @@
 .swiper {
-    width: 600px;
-    height: 300px;
+    width: 100%;
 }
-
-#galeria {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: space-around;
-    max-width: 800px; 
-}
-
-.imagen {
-    flex: 0 0 calc(33.33% - 10px);
-    overflow: hidden;
-    border-radius: 8px;
-}
-
-.imagen img {
+.swiper-wrapper {
     width: 100%;
     height: auto;
-    display: block;
 }
+.swiper-slide img {
+    width: 100%;
+    height: auto;
+}
+.swiper-img {
+    width: 100%;
+    height: auto; 
+}
+
+
+
+
+
+
+
+
+
