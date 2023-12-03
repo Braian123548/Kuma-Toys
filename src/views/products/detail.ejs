@@ -2,6 +2,10 @@
 <html>
 <%- include('../partials/head',{ title : 'Detalle' }) %>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> braian
     <body>
         <%- include('../partials/header') %>
 
@@ -28,11 +32,14 @@
                     <div thumbsSlider="" class="swiper mySwiper">
                         <div class="swiper-wrapper swiper-wrappers">
                             <div class="swiper-slide swiper-slides">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
                                 <img src="../../../images/products/<%= product.imagen%>" />
                             </div>
 
                             <% images.forEach(image=> {%>
                                 <div class="swiper-slide swiper-slides">
+                                <div class="swiper-slide">
                                     <img src="../../../images/products/<%= image%>" />
                                 </div>
                                 <% }); %>

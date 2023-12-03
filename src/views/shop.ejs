@@ -44,6 +44,20 @@
           <% }); %>
       </div>
 
+
+      
+      
+      <script>
+      var heartButtons = document.querySelectorAll('.heartButton');
+      heartButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+          var heartIcon = this.querySelector('.fa-heart');
+          heartIcon.style.color = heartIcon.style.color === 'red' ? '' : 'red';
+          heartIcon.style.borderColor = heartIcon.style.borderColor === 'red' ? '' : 'red'
+        });
+      });
+      </script>
+      
      
   </body>
 

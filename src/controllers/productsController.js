@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const { get } = require('http');
 
+const { existsSync, unlinkSync } = require("fs");
+
 
 const addProduct = {
     post: async (req, res) => {
@@ -162,7 +164,6 @@ const updateProduct = {
                             cantidad,
                             categoria,
                             descuento,
-
                             image: req.files.image ? req.files.image[0].filename : product.image,
                         },
                         {
