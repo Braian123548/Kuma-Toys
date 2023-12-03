@@ -2,6 +2,9 @@
 @import url(index.css);
 @import url(shop.css);
 @import url(detail.css);
+@import url(contact.css);
+@import url(about.css);
+
 
 body{
     padding: 1rem;

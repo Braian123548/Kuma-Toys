@@ -1,0 +1,14 @@
+.about img{
+    width: 300px;
+    height: 300px;
+}
+
+.about_container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.about section{
+    background-color: red;
+    margin: 10px;
+}
