@@ -10,7 +10,7 @@ module.exports = {
       cp:"5060",
       email: 'john@example.com',
       password: '$2b$10$L9boxxxEf5rAhL/eS0p1YeZDhFGYw3zuKo4D5azE75D0JyzyZmeR2',
-      rol:"admin", // remember to hash passwords in a real application
+      rol:"admin",
       createdAt: new Date(),
       updatedAt: new Date()
     }], {});

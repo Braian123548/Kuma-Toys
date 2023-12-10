@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head',{ title : 'Favorite' }) %>
+
+  <body>
+    <%- include('partials/header',{q : ''}) %>
+      <h1>Favoritos</h1>
+      <div class="contenedor-shop">
+        <% products.forEach(product=> { %>
+          <div class="card card-shop" style="width: 18rem;">
+            <a href="/products/detail/<%= product.id %>">
+              <img class="card-img-top" src="/images/products/<%= product.imagen %>" alt="Card image cap">
+              <div class="card-body">
+                <h4 class="card-text">
+                  <%= product.name %>
+                </h4>
+                <p class="card-text">
+                  <%= product.description %>
+                </p>
+
+              </div>
+            </a>
+            <div class="botones-shop">
+              <div>
+                <h4>$<%= product.price %>
+                </h4>
+              </div>
+              <div class="botones-shop separar">
+                <form method="POST" action="/products/favorite/<%= product.id %>" id="favoriteForm">
+                  <input type="hidden" name="id" class="productId" value="<%= product.id %>">
+                  <button type="submit" class="heartButton">
+                    <% if (favorites.some(favorite => favorite.productId === product.id)) { %>
+                      <i class="fa-regular fa-heart" style="color: red; border-color: red;"></i>
+                    <% } else { %>
+                      <i class="fa-regular fa-heart"></i>
+                    <% } %>
+                  </button>
+                </form>
+                <i class="fa-solid fa-bag-shopping"></i>
+              </div>
+            </div>
+          </div>
+
+          <% }); %>
+      </div>
+
+      
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+       $(document).ready(function() {
+  $('.heartButton').on('click', function(e) {
+    e.preventDefault(); // Evita que se envíe el formulario
+
+    var productId = $(this).siblings('.productId').val();
+    var formAction = '/products/favorite/' + productId;
+    var heartIcon = $(this).find('.fa-heart');
+
+    $.ajax({
+      url: formAction,
+      type: 'POST',
+      data: { id: productId },
+      success: function(response) {
+        if (response.isFavorite) {
+          heartIcon.css({ 'color': 'red', 'border-color': 'red' });
+        } else {
+          heartIcon.css({ 'color': '', 'border-color': '' });
+          location.reload(); // Recarga la página
+        }
+      }
+    });
+  });
+});
+
+      </script>
+  </body>
+
+</html>

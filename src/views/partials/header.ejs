@@ -1,3 +1,4 @@
+
 <nav class="navegacion-header">
 
     <div class="navegacion-header-search-contenedor">
@@ -7,24 +8,75 @@
         </div>
 
         <div>
-            <img width="200" src="/images/1.svg" alt="">
+            <a href="/">
+            <img width="200" src="/images/1.svg" alt=""></a>
         </div>
 
-        <div class="navegacion-header-search">
-            <form role="search">
-                <input type="search" style="display: none;" placeholder="Search" aria-label="Search">
-                <input type="submit" value="&#xf002;">
+
+
+        <div class="navegacion-header-search d-flex align-items-center">
+            <form action="/products/shop" method="get" class="search-container">
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar" name="q" value="<%= q %>">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
             </form>
-            <a href="#"><i class="fas fa-user" style="color: #000000;"></i></a>
-            <a href="#"><i class="fa-regular fa-heart" style="color: #000000;"></i></a>
-            <a href="#"><i class="fa-solid fa-bag-shopping" style="color: #000000;"></i></a>
+            
+            
+
+
+            <div class="form-inline-div">
+                <div>
+                    <a href="#" data-toggle="collapse" data-target="#modalHeader"><i class="fas fa-user" style="color: #000000;"></i></a>
+                    <div class="collapse collapses" id="modalHeader">
+                        <a href="/user/login">Login</a>
+                        <a href="/user/register">Registro</a>
+                        <a href="/user/profile/1">Perfil</a>
+                    </div>
+                </div>
+                <a href="/products/favorite"><i class="fa-regular fa-heart" style="color: #000000;"></i></a>
+                <a href="#"><i class="fa-solid fa-bag-shopping" style="color: #000000;"></i></a>
+            </div>
+
+
+
         </div>
+
+
     </div>
-    <div class="a-navegacion">
-        <a href="/">Home</a>
-        <a href="/admin">Shop</a>
-        <a href="#">About Us</a>
-        <a href="#">Contact</a>
+
+
+    <div class="navbar navbar-expand-lg">
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/products/shop">Shop</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+            </ul>
+
+        </div>
+
     </div>
+
+
+
+
+
+
 
 </nav>

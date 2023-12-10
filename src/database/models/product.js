@@ -12,12 +12,15 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.belongsTo(models.Categories, { foreignKey: 'categoryId', as: 'category' });
       this.hasMany(models.Images, { foreignKey: 'productId', as: 'images' });
+      this.hasMany(models.Favorites, { foreignKey: 'productId', as: 'favorites' });
+
 
     }
   }
   Products.init({
     name: DataTypes.STRING,
     description: DataTypes.TEXT,
+    descripcion: DataTypes.TEXT,
     price: DataTypes.FLOAT,
     categoryId: DataTypes.INTEGER,
     cantidad: DataTypes.INTEGER,

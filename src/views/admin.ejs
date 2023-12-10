@@ -3,13 +3,12 @@
 <%- include('partials/head') %>
 
     <body>
-        <%- include('partials/header') %>
+        <%- include('partials/header',{q : ''}) %>
             <div class="container">
                 <!-- BOTON PARA AÑADIR PRODUCTOS -->
                 <button type="button" rel="tooltip" class="btn btn-info btn-just-icon btn-sm" data-toggle="modal"
                     data-target="#addModal">
-                    <i class="material-icons">Añadir productos
-                    </i>
+                    Añadir productos
                 </button>
 
                 <!-- TABLA DE PRODUCTOS -->
@@ -45,13 +44,13 @@
                                 <td class="td-actions text-right">
                                     <button type="button" rel="tooltip" class="btn btn-success btn-just-icon btn-sm"
                                         data-toggle="modal" data-target="#editModal<%= product.id %>">
-                                        <i class="material-icons">edit</i>
+                                        Edit
                                     </button>
 
                                     <form action="/products/remove/<%= product.id %>?_method=DELETE" method="POST">
                                         <button type="submit" class="btn btn-danger btn-just-icon btn-sm"
                                             data-original-title="" title="">
-                                            <i class="material-icons">delete</i>
+                                           Delete
                                         </button>
                                     </form>
 
@@ -76,10 +75,14 @@
                                                     <input type="text" value="<%= product.name %>" name="name">
                                                 </label>
 
-                                                <label for="">Descripcion
+                                                <label for="">Descripcion corta 
                                                     <input type="text" value="<%= product.description %>"
                                                         name="description">
                                                 </label>
+
+                                                <label for="">Descripcion larga 
+                                                    <textarea name="descripcion"></textarea>
+                                                </label>                                                
 
                                                 <label for="">Precio
                                                     <input type="number" value="<%= product.price %>" name="price">
@@ -153,6 +156,10 @@
                                     <label for="">Descripcion
                                         <input type="text" value="<%= product.description %>" name="description">
                                     </label>
+
+                                    <label for="">Descripcion larga 
+                                        <textarea name="descripcion"></textarea>
+                                    </label>           
 
                                     <label for="">Precio
                                         <input type="number" value="<%= product.price %>" name="price">

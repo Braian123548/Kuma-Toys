@@ -1,58 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('partials/head') %>
+<%- include('partials/head',{ title : 'Shop' }) %>
 
   <body>
-
     <%- include('partials/header') %>
+      <h1>Shop</h1>
 
-      <div class="contenedor-shop">
-        <% products.forEach(product=> { %>
-          <div class="card card-shop" style="width: 18rem;">
-            <a href="/products/detail/<%= product.id %>">
-              <img class="card-img-top" src="/images/products/<%= product.imagen %>" alt="Card image cap">
-              <div class="card-body">
-                <h4 class="card-text">
-                  <%= product.name %>
-                </h4>
-                <p class="card-text">
-                  <%= product.description %>
-                </p>
 
+
+
+      <div class="contenedor-main-shop">
+        <form method="GET" action="/products/shop">
+          <details>
+            <summary>Categoría</summary>
+            <% categories.forEach(category=> { %>
+              <div class="contenedor-main-shop-categorias">
+                <input type="checkbox" id="category-<%= category.id %>" name="category" value="<%= category.id %>"
+                  <%=category.id==selectedCategory ? 'checked' : '' %>>
+                <label for="category-<%= category.id %>">
+                  <%= category.name %>
+                </label><br>
               </div>
-            </a>
-            <div class="botones-shop">
-              <div>
-                <h4>$<%= product.price %>
-                </h4>
-              </div>
-              <div>
-                <button class="heartButton">
-                  <i class="fa-regular fa-heart"></i>
-                </button>
-                <i class="fa-solid fa-bag-shopping"></i>
+            <% }); %>
+          </details>
+          
+
+          <details class="contenedor-main-shop-precios">
+            <summary>Precio</summary>
+            <label for="price-min">Precio mínimo:</label>
+            <input type="number" id="price-min" name="price-min" value="<%= selectedPriceMin %>">
+
+            <label for="price-max">Precio máximo:</label>
+            <input type="number" id="price-max" name="price-max" value="<%= selectedPriceMax %>">
+          </details>
+
+          <button type="submit" class="boton-filtrar">Aplicar filtros</button>
+          <br>
+          <a href="/products/shop" class="button-filtrar-quitar">Quitar filtros</a>
+        </form>
+
+
+
+
+        <div class="contenedor-shop">
+          <% products.forEach(product=> { %>
+            <div class="card card-shop" style="width: 18rem;">
+              <a href="/products/detail/<%= product.id %>">
+                <img class="card-img-top" src="/images/products/<%= product.imagen %>" alt="Card image cap">
+                <div class="card-body">
+                  <h4 class="card-text">
+                    <%= product.name %>
+                  </h4>
+                  <p class="card-text">
+                    <%= product.description %>
+                  </p>
+
+                </div>
+              </a>
+              <div class="botones-shop">
+                <div>
+                  <h4>$<%= product.price %>
+                  </h4>
+                </div>
+                <div class="botones-shop separar">
+                  <form method="POST" action="/products/favorite/<%= product.id %>" class="favoriteForm">
+                    <input type="hidden" name="id" value="<%= product.id %>" class="productId">
+                    <button type="submit" class="heartButton">
+                      <% if (favorites.some(favorite=> favorite.productId === product.id)) { %>
+                        <i class="fa-regular fa-heart" style="color: red; border-color: red;"></i>
+                        <% } else { %>
+                          <i class="fa-regular fa-heart"></i>
+                          <% } %>
+                    </button>
+                  </form>
+                  <i class="fa-solid fa-bag-shopping"></i>
+                </div>
               </div>
             </div>
-          </div>
 
-          <% }); %>
+            <% }); %>
+        </div>
       </div>
-
-
-      
-      
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <script>
-      var heartButtons = document.querySelectorAll('.heartButton');
-      heartButtons.forEach(function(button) {
-        button.addEventListener('click', function() {
-          var heartIcon = this.querySelector('.fa-heart');
-          heartIcon.style.color = heartIcon.style.color === 'red' ? '' : 'red';
-          heartIcon.style.borderColor = heartIcon.style.borderColor === 'red' ? '' : 'red'
+        $(document).ready(function () {
+          $('.heartButton').on('click', function (e) {
+            e.preventDefault(); // Evita que se envíe el formulario
+
+            var productId = $(this).siblings('.productId').val();
+            var formAction = '/products/favorite/' + productId;
+            var heartIcon = $(this).find('.fa-heart');
+
+            $.ajax({
+    url: formAction,
+    type: 'POST',
+    data: { id: productId },
+    success: function (response) {
+        if (response.isFavorite) {
+            heartIcon.css({ 'color': 'red', 'border-color': 'red' });
+        } else {
+            heartIcon.css({ 'color': '', 'border-color': '' });
+        }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        if (jqXHR.status == 401) { // Si el código de estado es 401 (No autorizado)
+            window.location.href = "/user/login";
+        }
+    }
+});
+          });
         });
-      });
       </script>
-      
-     
+
   </body>
 
 </html>

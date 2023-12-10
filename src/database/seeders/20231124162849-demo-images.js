@@ -4,7 +4,7 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert('Images', [{
-      filename: "DataTypes.STRING",
+      filename: "mulyadi-bsMnWtskoCU-unsplash.jpg",
       productId: 1,
       createdAt: new Date(),
       updatedAt: new Date()

@@ -16,13 +16,14 @@ module.exports = {
         type: Sequelize.STRING
       },
       image: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true 
       },
       direccion: {
         type: Sequelize.STRING
       },
       cp: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       email: {
         type: Sequelize.STRING
@@ -49,4 +50,3 @@ module.exports = {
     await queryInterface.dropTable('Users');
   }
 };
-

@@ -2,9 +2,8 @@
 <html>
 <%- include('../partials/head',{ title : 'Detalle' }) %>
 
-
     <body>
-        <%- include('../partials/header') %>
+      <%- include('../partials/header',{q : ''}) %>
 
             <div class="contenedor-detail">
 
@@ -27,13 +26,13 @@
                     </div>
 
                     <div thumbsSlider="" class="swiper mySwiper">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide">
+                        <div class="swiper-wrapper swiper-wrappers">
+                            <div class="swiper-slide swiper-slides">
                                 <img src="../../../images/products/<%= product.imagen%>" />
                             </div>
 
                             <% images.forEach(image=> {%>
-                                <div class="swiper-slide">
+                                <div class="swiper-slide swiper-slides">
                                     <img src="../../../images/products/<%= image%>" />
                                 </div>
                                 <% }); %>
@@ -44,23 +43,37 @@
                     
                 </div>
 
-                <div>
+                <div class="contenedor-detalles">
                     <h1>
                         <%= product.name%>
                     </h1>
                     <h3>
                         <%= product.description%>
                     </h3>
-                    <h4>
-                        <%= product.Price%>
-                    </h4>
-                    <div>
-                        <button class="heartButton">
-                            <i class="fa-regular fa-heart"></i>
-                        </button>
-                        <i class="fa-solid fa-bag-shopping"></i>
-                    </div>
+                    <p><%= product.descripcion%></p>
 
+                    <div class="botones-detail">
+                        <div>
+                          <h4>$<%= product.price %>
+                          </h4>
+                        </div>
+                        <div>
+                            <form method="POST" action="/products/favorite/<%= product.id %>" class="favoriteForm">
+                                <input type="hidden" name="id" value="<%= product.id %>" class="productId">
+                                <button type="submit" class="heartButton">
+                                  <% if (favorites.some(favorite => favorite.productId === product.id)) { %>
+                                    <i class="fa-regular fa-heart" style="color: red; border-color: red;"></i>
+                                  <% } else { %>
+                                    <i class="fa-regular fa-heart"></i>
+                                  <% } %>
+                                </button>
+                              </form>
+                              
+                          <i class="fa-solid fa-bag-shopping"></i>
+                        </div>
+                      </div>
+
+                      
                 </div>
 
 
@@ -77,6 +90,32 @@
                 });
             </script>
 
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('.heartButton').on('click', function(e) {
+      e.preventDefault(); // Evita que se envíe el formulario
+
+      var productId = $(this).siblings('.productId').val();
+      var formAction = '/products/favorite/' + productId;
+      var heartIcon = $(this).find('.fa-heart');
+
+      $.ajax({
+        url: formAction,
+        type: 'POST',
+        data: { id: productId },
+        success: function(response) {
+          if (response.isFavorite) {
+            heartIcon.css({ 'color': 'red', 'border-color': 'red' });
+          } else {
+            heartIcon.css({ 'color': '', 'border-color': '' });
+          }
+        }
+      });
+    });
+  });
+</script>
             <!-- Swiper JS -->
             <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 

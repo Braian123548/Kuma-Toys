@@ -1,14 +1,14 @@
 const { validationResult } = require('express-validator');
 const db = require('../database/models');
 const fs = require('fs');
-const path = require('path')
-const { existsSync, unlinkSync } = require("fs");
+const { existsSync, unlinkSync } = fs;
+const path = require('path');
 
 
 const addProduct = {
     post: async (req, res) => {
 
-        const { name, description, price, cantidad, categoria, descuento } = req.body;
+        const { name, description, descripcion, price, cantidad, categoria, descuento } = req.body;
         console.log(name, description, price, cantidad, categoria, descuento);
 
         const image = req.files.mainImage ? req.files.mainImage[0].filename : null;
@@ -25,6 +25,7 @@ const addProduct = {
             const product = await db.Products.create({
                 name: name,
                 description: description,
+                descripcion: descripcion,
                 price: price,
                 cantidad: cantidad,
                 imagen: image,
@@ -76,9 +77,20 @@ const detail = {
         }
 
         const filenames = imagenes.map(image => image.dataValues.filename);
-        res.render("./products/detail", { product: product.dataValues, images: filenames })
-    }
 
+
+        const idUser = req.session.userLogin || req.session.userAdmin;
+        let favorites = [];
+        if (idUser) {
+            favorites = await db.Favorites.findAll({
+                where: {
+                    userId: idUser.id
+                }
+            });
+        }
+
+        res.render("./products/detail", { product: product.dataValues, images: filenames, favorites: favorites, })
+    }
 
 
 }
@@ -114,6 +126,10 @@ const remove = {
                 }
             });
 
+            await db.ShoppingCarts.destroy({ where: { productId: id } });
+
+            await db.Favorites.destroy({ where: { productId: id } });
+
             await db.Images.destroy({ where: { productId: id } });
 
 
@@ -129,21 +145,6 @@ const remove = {
 
 
 const updateProduct = {
-
-    // get: async (req, res) => {
-
-    //     try {
-    //         const id = req.params.id;
-    //         const category = await db.Categories.findAll();
-    //         const product = await db.Products.findByPk(id);
-    //         return res.render('./admin/editProduct', {
-    //             category,
-    //             product
-    //         })
-    //     } catch (error) {
-    //         return console.log(error)
-    //     }
-    // },
 
     put: (req, res) => {
 
@@ -172,7 +173,7 @@ const updateProduct = {
                             cantidad,
                             categoria,
                             descuento,
-                            
+
                             image: req.files.image ? req.files.image[0].filename : product.image,
                         },
                         {
@@ -183,7 +184,7 @@ const updateProduct = {
                     ).then(() => {
                         if (req.files.images) {
                             product.images.forEach((image) => {
-                                existsSync(`./public/images/products/${image.file}`) &&
+                                    existsSync(`./public/images/products/${image.file}`) &&
                                     unlinkSync(`./public/images/products/${image.file}`);
                             });
 
@@ -214,12 +215,82 @@ const updateProduct = {
         }
     }
 }
+
+const favorite = {
+
+    getFavorites: async (req, res) => {
+        const idUser = req.session.userLogin || req.session.userAdmin;
+
+        if (!idUser) {
+            return res.redirect("/user/login");
+        }
+        const id = idUser.id;
+
+        const favorites = await db.Favorites.findAll({
+            where: {
+                userId: id
+            },
+            include: [{
+                model: db.Products,
+                as: 'product'
+            }]
+        });
+
+
+        const products = favorites.map(favorite => favorite.product);
+
+        res.render('favorite', { products: products, favorites: favorites });
+    },
+
+
+    shop: async (req, res) => {
+        const idProduct = req.params.id;
+        const idUser = req.session.userLogin || req.session.userAdmin;
+
+        if (!idUser) {
+            return res.status(401).send('No autorizado');
+        }
     
 
+        const id = idUser.id;
 
-        module.exports = {
-            addProduct,
-            detail,
-            updateProduct,
-            remove
+        const favoriteProduct = await db.Favorites.findOne({
+            where: {
+                userId: id,
+                productId: idProduct
+            }
+        });
+
+        let isFavorite;
+        if (favoriteProduct) {
+            await favoriteProduct.destroy();
+            isFavorite = false;
+        } else {
+            await db.Favorites.create({
+                userId: id,
+                productId: idProduct
+            });
+            isFavorite = true;
         }
+
+        res.json({ isFavorite: isFavorite });
+    },
+
+
+}
+
+
+const profile = {
+    get: (req, res) => {
+        res.render('profile')
+    }
+}
+
+module.exports = {
+    addProduct,
+    detail,
+    updateProduct,
+    remove,
+    favorite,
+    profile
+}

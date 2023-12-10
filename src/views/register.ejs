@@ -10,7 +10,7 @@
 <body>
     <h1>Register</h1>
 
-    <form action="/user/register" method="post">
+    <form action="/user/register" method="post" enctype="multipart/form-data">
         <label for="firstName">Nombre:</label>
         <input type="text" id="firstName" name="firstName"
             value="<%= locals.old && (old.firstName && old.firstName) %>">

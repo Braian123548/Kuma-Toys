@@ -18,7 +18,7 @@ router
          },
          {
              name: "images",
-             maxCount: 4
+             maxCount: 2
          }
      ]), productsController.addProduct.post)
 
@@ -39,11 +39,16 @@ router
         },
         {
             name: "images",
-            maxCount: 4
+            maxCount: 2
         }
     ]), productsController.updateProduct.put)
 
     .delete('/remove/:id', removeController.remove.delete)
+
+    .post('/favorite/:id', removeController.favorite.shop)
+
+    .get('/favorite', removeController.favorite.getFavorites)
+
 
     
 module.exports = router;
