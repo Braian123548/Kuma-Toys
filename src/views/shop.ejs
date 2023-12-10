@@ -73,7 +73,7 @@
                           <% } %>
                     </button>
                   </form>
-                  <i class="fa-solid fa-bag-shopping"></i>
+                  <i class="fa-solid fa-plus"></i>
                 </div>
               </div>
             </div>
@@ -103,7 +103,7 @@
         }
     },
     error: function(jqXHR, textStatus, errorThrown) {
-        if (jqXHR.status == 401) { // Si el código de estado es 401 (No autorizado)
+        if (jqXHR.status == 401) { 
             window.location.href = "/user/login";
         }
     }

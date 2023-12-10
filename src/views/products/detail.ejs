@@ -25,6 +25,8 @@
 
                     </div>
 
+                    
+
                     <div thumbsSlider="" class="swiper mySwiper">
                         <div class="swiper-wrapper swiper-wrappers">
                             <div class="swiper-slide swiper-slides">
@@ -40,7 +42,7 @@
                         </div>
                     </div>
 
-                    
+
                 </div>
 
                 <div class="contenedor-detalles">
@@ -72,11 +74,18 @@
                           <i class="fa-solid fa-bag-shopping"></i>
                         </div>
                       </div>
-
+                      <div>
+                        <label for="quantity">Cantidad:</label>
+                        <select id="quantity" name="quantity">
+                            <% for(let i = 1; i <= product.cantidad; i++) { %>
+                                <option value="<%= i %>"><%= i %></option>
+                            <% } %>
+                        </select>
+                    </div>
                       
                 </div>
 
-
+              
             </div>
 
             <script>
