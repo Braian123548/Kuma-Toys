@@ -92,6 +92,16 @@
 }
 
 
+.btn-outline-success {
+    color: purple;
+    border-color: purple;
+}
+.btn-outline-success:hover {
+    background-color: purple;
+    border-color: purple;
+    color: white;
+}
+
 @media (width>300px) and (width<780px) {
     .navegacion-header-search-contenedor {
         display: flex;
