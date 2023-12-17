@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<%- include('../partials/head',{ title : 'Detalle' }) %>
+
+
+    <body>
+        <%- include('../partials/header') %>
+
+            <div class="contenedor-detail">
+
+
+                <div class="contenedor-detail-carrito">
+
+               
+                    <div class="swiper mySwiper2">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <img src="../../../images/products/<%= product.imagen%>" />
+                            </div>
+                            <% images.forEach(image=> {%>
+                                <div class="swiper-slide">
+                                    <img src="../../../images/products/<%= image%>" />
+                                </div>
+                                <% }); %>
+                        </div>
+
+                    </div>
+
+                    <div thumbsSlider="" class="swiper mySwiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+                                <img src="../../../images/products/<%= product.imagen%>" />
+                            </div>
+
+                            <% images.forEach(image=> {%>
+                                <div class="swiper-slide">
+                                    <img src="../../../images/products/<%= image%>" />
+                                </div>
+                                <% }); %>
+
+                        </div>
+                    </div>
+
+                    
+                </div>
+
+                <div>
+                    <h1>
+                        <%= product.name%>
+                    </h1>
+                    <h3>
+                        <%= product.description%>
+                    </h3>
+                    <h4>
+                        <%= product.Price%>
+                    </h4>
+                    <div>
+                        <button class="heartButton">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <button type="button" onclick="addItemToCart(1,'<%=product.id%>')"> <i class="fa-solid fa-bag-shopping"></i></button>
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+            <script>
+                var heartButtons = document.querySelectorAll('.heartButton');
+                heartButtons.forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var heartIcon = this.querySelector('.fa-heart');
+                        heartIcon.style.color = heartIcon.style.color === 'red' ? '' : 'red';
+                        heartIcon.style.borderColor = heartIcon.style.borderColor === 'red' ? '' : 'red'
+                    });
+                });
+            </script>
+
+            <!-- Swiper JS -->
+            <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+            <!-- Initialize Swiper -->
+            <script>
+                var swiper = new Swiper(".mySwiper", {
+                    loop: true,
+                    spaceBetween: 10,
+                    slidesPerView: 4,
+                    freeMode: true,
+                    watchSlidesProgress: true,
+                });
+                var swiper2 = new Swiper(".mySwiper2", {
+                    loop: true,
+                    spaceBetween: 10,
+                    navigation: {
+                        nextEl: ".swiper-button-next",
+                        prevEl: ".swiper-button-prev",
+                    },
+                    thumbs: {
+                        swiper: swiper,
+                    },
+                });
+            </script>
+            <script src="/javascripts/cart.js" ></script>
+    </body>
+
+</html>

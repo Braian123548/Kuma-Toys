@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/head') %>
+
+  <body>
+
+    <%- include('partials/header') %>
+
+      <div class="contenedor-shop">
+        <% products.forEach(product=> { %>
+          <div class="card card-shop" style="width: 18rem;">
+            <a href="/products/detail/<%= product.id %>">
+              <img class="card-img-top" src="/images/products/<%= product.imagen %>" alt="Card image cap">
+              <div class="card-body">
+                <h4 class="card-text">
+                  <%= product.name %>
+                </h4>
+                <p class="card-text">
+                  <%= product.description %>
+                </p>
+
+              </div>
+            </a>
+            <div class="botones-shop">
+              <div>
+                <h4>$<%= product.price %>
+                </h4>
+              </div>
+              <div>
+                <button class="heartButton">
+                  <i class="fa-regular fa-heart"></i>
+                </button>
+                <i class="fa-solid fa-bag-shopping"></i>
+              </div>
+            </div>
+          </div>
+
+          <% }); %>
+      </div>
+
+
+      
+      
+      <script>
+      var heartButtons = document.querySelectorAll('.heartButton');
+      heartButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+          var heartIcon = this.querySelector('.fa-heart');
+          heartIcon.style.color = heartIcon.style.color === 'red' ? '' : 'red';
+          heartIcon.style.borderColor = heartIcon.style.borderColor === 'red' ? '' : 'red'
+        });
+      });
+      </script>
+      
+     
+  </body>
+
+</html>
