@@ -51,48 +51,102 @@ const register = {
          res.render('login',{title:"login"});
      },
      post: async (req, res) => {
-         const errors = validationResult(req);
-         if (!errors.isEmpty()) {
-             return res.status(400).render('login', { errors: errors.mapped(), old: req.body, title:"login"});
-         }
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).render('login', { errors: errors.mapped(), old: req.body, title:"login"});
+        }
 
-         await db.Users.findOne({
-            where : {
-                email: req.body.email
-            }
-        })
-        .then(user=> {
-            if(user.rol === 'admin') {
-                req.session.userAdmin = {
-                    id: user.id,
-                    firtsName: user.firtsName,
-                    lastName: user.lastName, 
-                }
-            } else {
-                req.session.userLogin = {
-                    id: user.id,
-                    firtsName: user.firtsName,
-                    lastName: user.lastName, 
-                }
-            }
-        
-            if (req.body.remember) {
-                if(user.rol === 'admin') {
-                    res.cookie("Kuma-Toys", req.session.userAdmin, {
-                        maxAge: 1000 * 60 * 5,
-                    });
-                } else {
-                    res.cookie("Kuma-Toys", req.session.userLogin, {
-                        maxAge: 1000 * 60 * 5,
-                    });
-                }
-            }
-            
-        
-            return res.redirect('/')
-             })
-             .catch(error => console.log(error))
-     }
+        await db.Users.findOne({
+           where : {
+               email: req.body.email
+           }
+       })
+       .then(user=> {
+           if(user.rol === 'admin') {
+               req.session.userAdmin = {
+                   id: user.id,
+                   firtsName: user.firtsName,
+                   lastName: user.lastName, 
+               }
+           } else {
+               req.session.userLogin = {
+                   id: user.id,
+                   firtsName: user.firtsName,
+                   lastName: user.lastName, 
+               }
+           }
+       
+           if (req.body.remember) {
+               if(user.rol === 'admin') {
+                   res.cookie("Kuma-Toys", req.session.userAdmin, {
+                       maxAge: 1000 * 60 * 5,
+                   });
+               } else {
+                   res.cookie("Kuma-Toys", req.session.userLogin, {
+                       maxAge: 1000 * 60 * 5,
+                   });
+               }
+           }
+
+                   /* ShoppingCart */
+
+                   db.ShoppingCarts.findOne({
+                       where : {
+                           userId : user.id,
+                           statusId : 1
+                       },
+                       include : [
+                           {
+                               association : 'items',
+                               include : {
+                                   association : 'product',
+                               }
+                           }
+                       ]
+                   }).then( order => {
+                       if(order){
+                           req.session.cart = {
+                               orderId : order.id,
+                               products : order.items.map(({quantity,product: {id, name, imagen, price, descuento}}) => {
+                                   return {
+                                       id,
+                                       name,
+                                       imagen,
+                                       price,
+                                       descuento,
+                                       quantity,
+                               }
+                               }),
+                               total : order.items.map(item => item.product.price * item.quantity).reduce((a,b) => a+b, 0).toFixed(2)
+                           }
+   
+                           console.log(req.session.cart);
+   
+                           return res.redirect('/')
+   
+                       } else {
+                           db.ShoppingCarts.create({
+                               total : 0,
+                               userId : user.id,
+                               statusId : 1
+                           }).then(order => {
+                               req.session.cart = {
+                                   orderId : order.id,
+                                   products : [],
+                                   total : 0,
+                               }
+                               console.log(req.session.cart);
+                               return res.redirect('/')
+   
+                           })
+                       }
+                   })
+           
+       
+           
+            })
+            .catch(error => console.log(error))
+    }
  }
 
 

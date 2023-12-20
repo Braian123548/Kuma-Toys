@@ -33,7 +33,12 @@
                     </div>
                 </div>
                 <a href="/products/favorite"><i class="fa-regular fa-heart" style="color: #000000;"></i></a>
-                <a href="#"><i class="fa-solid fa-bag-shopping" style="color: #000000;"></i></a>
+                <button id="btn-cart" type="button" class="btn btn-outline-light position-relative" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <i class="fa-solid fa-bag-shopping" style="color: #000000;"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="show-count-cart" hidden >
+                        
+                    </span>
+                </button>
             </div>
 
 
@@ -74,7 +79,29 @@
     </div>
 
 
+<!-- Button trigger modal -->
 
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" >
+      <div class="modal-content" style="background: linear-gradient(to right, #ffcc00, #ff6600);">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Carrito</h1>
+          
+        </div>
+        <div class="modal-body" id="cart-body">
+        
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger disabled" onclick="emptyCart()" id="btn-empty-cart">Vaciar Carrito</button>
+            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Seguir Comprando</button>
+            <button type="button" class="btn btn-primary">Confirmar Compra</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 

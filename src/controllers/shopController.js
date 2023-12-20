@@ -9,7 +9,6 @@ const shop = {
         const priceMin = parseInt(req.query['price-min'], 10);
         const priceMax = parseInt(req.query['price-max'], 10);
 
-       
         const categories = await db.Categories.findAll();
         res.locals.q = query
         let favorites = [];
@@ -24,11 +23,11 @@ const shop = {
         if (query) {
             whereClause[Op.or] = [
                 { name: { [Op.like]: '%' + query + '%' } },
-                { categoryId: { [Op.like]: '%' + query + '%' } }
+                { '$category.name$': { [Op.like]: '%' + query + '%' } }
             ];
         }
         if (category) {
-            whereClause.categoryId = category;
+            whereClause['$category.name$'] = category;
         }
         if (priceMin) {
             whereClause.price = { [Op.gte]: priceMin };
@@ -37,17 +36,23 @@ const shop = {
             if (!whereClause.price) whereClause.price = {};
             whereClause.price[Op.lte] = priceMax;
         }
-        await db.Products.findAll({ where: whereClause })
-            .then((products) => {
-                return res.render("shop", {
-                    products, favorites, title: "shop", q: query , selectedCategory: category,
-            selectedPriceMin: priceMin,
-            selectedPriceMax: priceMax, categories
-                });
-            })
-            .catch((error) => {
-                console.log(error);
+        await db.Products.findAll({ 
+            where: whereClause,
+            include: [{
+                model: db.Categories,
+                as: 'category'
+            }]
+        })
+        .then((products) => {
+            return res.render("shop", {
+                products, favorites, title: "shop", q: query , selectedCategory: category,
+                selectedPriceMin: priceMin,
+                selectedPriceMax: priceMax, categories
             });
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 }
 

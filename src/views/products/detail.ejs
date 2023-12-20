@@ -3,14 +3,14 @@
 <%- include('../partials/head',{ title : 'Detalle' }) %>
 
     <body>
-      <%- include('../partials/header',{q : ''}) %>
+        <%- include('../partials/header',{q : '' }) %>
 
             <div class="contenedor-detail">
 
 
                 <div class="contenedor-detail-carrito">
 
-               
+
                     <div class="swiper mySwiper2">
                         <div class="swiper-wrapper">
                             <div class="swiper-slide">
@@ -25,7 +25,7 @@
 
                     </div>
 
-                    
+
 
                     <div thumbsSlider="" class="swiper mySwiper">
                         <div class="swiper-wrapper swiper-wrappers">
@@ -52,40 +52,48 @@
                     <h3>
                         <%= product.description%>
                     </h3>
-                    <p><%= product.descripcion%></p>
+                    <p>
+                        <%= product.descripcion%>
+                    </p>
 
                     <div class="botones-detail">
                         <div>
-                          <h4>$<%= product.price %>
-                          </h4>
+                            <h4>$<%= product.price %>
+                            </h4>
                         </div>
                         <div>
                             <form method="POST" action="/products/favorite/<%= product.id %>" class="favoriteForm">
                                 <input type="hidden" name="id" value="<%= product.id %>" class="productId">
                                 <button type="submit" class="heartButton">
-                                  <% if (favorites.some(favorite => favorite.productId === product.id)) { %>
-                                    <i class="fa-regular fa-heart" style="color: red; border-color: red;"></i>
-                                  <% } else { %>
-                                    <i class="fa-regular fa-heart"></i>
-                                  <% } %>
+                                    <% if (favorites.some(favorite=> favorite.productId === product.id)) { %>
+                                        <i class="fa-regular fa-heart" style="color: red; border-color: red;"></i>
+                                        <% } else { %>
+                                            <i class="fa-regular fa-heart"></i>
+                                            <% } %>
                                 </button>
-                              </form>
-                              
-                          <i class="fa-solid fa-bag-shopping"></i>
+                            </form>
+
+                            <div>
+
+                                <button type="button" onclick="addItemToCart(1,'<%=product.id%>')"> <i
+                                        class="fa-solid fa-bag-shopping"></i></button>
+                            </div>
                         </div>
-                      </div>
-                      <div>
+                    </div>
+                    <div>
                         <label for="quantity">Cantidad:</label>
                         <select id="quantity" name="quantity">
-                            <% for(let i = 1; i <= product.cantidad; i++) { %>
-                                <option value="<%= i %>"><%= i %></option>
-                            <% } %>
+                            <% for(let i=1; i <=product.cantidad; i++) { %>
+                                <option value="<%= i %>">
+                                    <%= i %>
+                                </option>
+                                <% } %>
                         </select>
                     </div>
-                      
+
                 </div>
 
-              
+
             </div>
 
             <script>
@@ -100,31 +108,31 @@
             </script>
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  $(document).ready(function() {
-    $('.heartButton').on('click', function(e) {
-      e.preventDefault(); // Evita que se envíe el formulario
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    $('.heartButton').on('click', function (e) {
+                        e.preventDefault(); // Evita que se envíe el formulario
 
-      var productId = $(this).siblings('.productId').val();
-      var formAction = '/products/favorite/' + productId;
-      var heartIcon = $(this).find('.fa-heart');
+                        var productId = $(this).siblings('.productId').val();
+                        var formAction = '/products/favorite/' + productId;
+                        var heartIcon = $(this).find('.fa-heart');
 
-      $.ajax({
-        url: formAction,
-        type: 'POST',
-        data: { id: productId },
-        success: function(response) {
-          if (response.isFavorite) {
-            heartIcon.css({ 'color': 'red', 'border-color': 'red' });
-          } else {
-            heartIcon.css({ 'color': '', 'border-color': '' });
-          }
-        }
-      });
-    });
-  });
-</script>
+                        $.ajax({
+                            url: formAction,
+                            type: 'POST',
+                            data: { id: productId },
+                            success: function (response) {
+                                if (response.isFavorite) {
+                                    heartIcon.css({ 'color': 'red', 'border-color': 'red' });
+                                } else {
+                                    heartIcon.css({ 'color': '', 'border-color': '' });
+                                }
+                            }
+                        });
+                    });
+                });
+            </script>
             <!-- Swiper JS -->
             <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
@@ -149,6 +157,8 @@
                     },
                 });
             </script>
+
+
     </body>
 
 </html>
